@@ -13,7 +13,7 @@ from typing import Union, Optional
 class Cache:
     """Cache class"""
 
-    def __init__(self) -> None:
+    def __init__(self):
         """ storing an instance of the
         Redis client as a private variable
         named _redis"""
@@ -29,7 +29,9 @@ class Cache:
         self.__redis.set(rid, data)
         return rid
 
-    def get(self, key: str, fn: Optional[callable] = None) -> Union[str, bytes, float, int]:
+    def get(self, key: str, 
+            fn: Optional[callable] = 
+            None) -> Union[str, bytes, float, int]:
         """Get stored value back"""
         v = self.__redis.get(key)
         if not fn:
