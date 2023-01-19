@@ -7,7 +7,7 @@ and flush the instance using flushdb.
 """
 import redis
 import uuid
-from typing import Union, Optional
+from typing import Union, Optional, Callable
 
 
 class Cache:
@@ -21,7 +21,7 @@ class Cache:
         self.__redis = r
         self.__redis.flushdb()
 
-    def store(self, data: Union[str, int, float, bytes]) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """generate a random key,
         store the input data in Redis using
         the random key and return the key"""
@@ -30,7 +30,7 @@ class Cache:
         return rid
 
     def get(self, key: str, 
-            fn: Optional[callable] = 
+            fn: Optional[Callable] = 
             None) -> Union[str, bytes, float, int]:
         """Get stored value back"""
         v = self.__redis.get(key)
