@@ -11,6 +11,22 @@ from typing import Union, Optional, Callable
 from functools import wraps
 
 
+def replay(method: Callable):
+    """ display the history of calls of a particular function """
+    key = method.__qualname__
+    inputs = key + ":inputs"
+    outputs = key + ":outputs"
+    redis = method.__self__._redis
+    count = redis.get(key).decode("utf-8")
+    print("{} was called {} times:".format(key, count))
+    inputList = redis.lrange(inputs, 0, -1)
+    outputList = redis.lrange(outputs, 0, -1)
+    redis_zipped = list(zip(inputList, outputList))
+    for a, b in redis_zipped:
+        attr, data = a.decode("utf-8"), b.decode("utf-8")
+        print("{}(*{}) -> {}".format(key, attr, data))
+        
+        
 def call_history(method: Callable) -> Callable:
     """history"""
     key = method.__qualname__
