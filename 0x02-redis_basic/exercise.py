@@ -11,18 +11,17 @@ from typing import Union, Optional, Callable
 from functools import wraps
 
 
-
 def call_history(method: Callable) -> Callable:
     """history"""
     key = method.__qualname__
-    input = key + ":inputs"
-    output = key + ":outputs"
+    inputs = key + ":inputs"
+    outputs = key + ":outputs"
 
     @wraps(method)
     def wrapper(self, *arg, **kwd):
-        self._redis.rpush(input, str(arg))
+        self._redis.rpush(inputs, str(arg))
         v = method(self, *arg, **kwd)
-        self._redis.rpush(output, str(v))
+        self._redis.rpush(outputs, str(v))
         return v
     return wrapper
 
