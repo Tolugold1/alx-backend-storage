@@ -34,6 +34,7 @@ class Cache:
         self.__redis = r
         self.__redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, int, float, bytes]) -> str:
         """generate a random key,
         store the input data in Redis using
