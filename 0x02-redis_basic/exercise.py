@@ -18,22 +18,22 @@ class Cache:
         Redis client as a private variable
         named _redis"""
         r = redis.Redis()
-        self.__redis = r
-        self.__redis.flushdb()
+        self._redis = r
+        self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """generate a random key,
         store the input data in Redis using
         the random key and return the key"""
         rid = str(uuid.uuid4())
-        self.__redis.set(rid, data)
+        self._redis.set(rid, data)
         return rid
 
     def get(self, key: str, 
             fn: Optional[Callable] = 
             None) -> Union[str, bytes, float, int]:
         """Get stored value back"""
-        v = self.__redis.get(key)
+        v = self._redis.get(key)
         if not fn:
             return v
         else:
@@ -41,11 +41,11 @@ class Cache:
 
     def get_str(self, key: str) -> str:
         """get string"""
-        v = self.__redis.get(key).decode("utf-8")
+        v = self._redis.get(key).decode("utf-8")
         return v
 
     def get_int(self, key: str) -> int:
         """get int"""
-        v = self.__redis.get(key)
+        v = self._redis.get(key)
         if type(v) is int:
             return v
